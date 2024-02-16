@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using _Reusable.Singleton;
 using System.Collections;
+using Cinemachine;
 
 namespace General
 {
@@ -17,8 +18,15 @@ namespace General
         public bool IsGameFinished;
         private InputManager.InputListener _listener;
 
+        public PlayerController PlayerController;
+
+        [Space(5)]
         [Header("Hud Panel")]
         [SerializeField] private GameObject _panelView;
+
+        [Space(5)]
+        [Header("Camera")]
+        public CinemachineVirtualCamera MainCamera;
    
         #endregion
 
@@ -35,7 +43,7 @@ namespace General
         protected override void Awake()
         {
             base.Awake();
-            
+
             DOTween.KillAll();
             Input.multiTouchEnabled = false;
 
