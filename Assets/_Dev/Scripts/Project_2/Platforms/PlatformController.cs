@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using General;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
@@ -15,27 +16,32 @@ public class PlatformController : MonoBehaviour
     //Tween Settings
     [SerializeField] private float _tweenTime;
     [SerializeField] private Ease _easeType;
+    [SerializeField] private bool _isBasePlatform;
+    private bool _isStopped;
     #endregion
 
     #region Mono
     private void OnEnable()
     {
+        if(_isBasePlatform) return;
         GameManager.OnPlayerTouch += StopPlatform;
     }
 
     private void OnDisable()
     {
+        if(_isBasePlatform) return;
         GameManager.OnPlayerTouch -= StopPlatform;
     }
 
     #endregion
 
     #region Methods
-    public void SetupPlatform(PlatformParentController platformParentController, bool isFirstPlatform, float sizeX)
+    public void SetupPlatform(PlatformParentController platformParentController, bool isFirstPlatform, float sizeX, Material mat)
     {
         _platformParentController = platformParentController;
         SetScale(sizeX);
         SetStartType();
+        SetMaterial(mat);
 
         MovePlatform(isFirstPlatform);
     }
@@ -57,9 +63,9 @@ public class PlatformController : MonoBehaviour
         }
     }
 
-    void SetMaterial()
+    void SetMaterial(Material mat)
     {
-
+        transform.GetComponent<MeshRenderer>().material = mat;
     }
 
     //MOVEMENT
@@ -99,36 +105,46 @@ public class PlatformController : MonoBehaviour
     //WHEN TOUCH
     public void StopPlatform()
     {
+        if(_isStopped) return;
+        _isStopped = true;
+
         DOTween.Kill(transform);
         CheckPlatform();
-        GameManager.OnPlayerTouch -= StopPlatform;
+        
     }
 
     void CheckPlatform()
     {
+        Debug.Log(gameObject.name + " çalıştı" );
         Transform prevPlatform = _platformParentController.PreviousPlatform.transform;
 
         var prevSize = prevPlatform.localScale.x;
         var distance = prevPlatform.position.x - transform.position.x;
 
-        if(Mathf.Abs(distance) <= GameManager.Instance.DifficultyData.ToleranceDistance){
-            Perfection(prevPlatform);
-            return;
-        }
-
-        if (distance >= prevSize)
+        if (Mathf.Abs(distance) <= GameManager.Instance.DifficultyData.ToleranceDistance)
         {
-            Fail();
+            Perfection(prevPlatform);
         }
         else
         {
-            SlicePlatform(distance);
+            if (distance >= prevSize)
+            {
+                Fail();
+            }
+            else
+            {
+                SlicePlatform(distance);
+            }
         }
+        //GameManager.OnPlayerTouch -= StopPlatform;
+
     }
 
-    void Perfection(Transform prevPlatform){
+    void Perfection(Transform prevPlatform)
+    {
         transform.position = new Vector3(prevPlatform.position.x, transform.position.y, transform.position.z);
         _platformParentController.SpawnPlatform(false);
+        Debug.Log("çalıştı2");
         //TODO: Effect & Audio.
     }
 
@@ -161,7 +177,7 @@ public class PlatformController : MonoBehaviour
         float fallPlatformXPos = cubeEdge + fallPlatformSize / 2f * direction;
 
         SpawnFallPlatform(fallPlatformSize, fallPlatformXPos);
-        
+
         _platformParentController.SpawnPlatform(false);
     }
 

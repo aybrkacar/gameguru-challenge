@@ -13,77 +13,99 @@ public class PlatformParentController : MonoBehaviour
     [SerializeField] private LeanGameObjectPool _pool;
     [SerializeField] private int _spawnedPlatformsCount = 0;
 
+    public float[] SpawnPoints = new float[] { -7f, 7f };
+    //[HideInInspector]
     public GameObject CurrentPlatform;
-    public float[] SpawnPoints = new float[]{-7f,7f};
-
     //[HideInInspector]
     public GameObject PreviousPlatform;
+
+    [Space(5)]
+    [Header("Materials")]
+    public List<Material> platformMatList;
+    private int _materialIndex = 0;
+    public int MaterialIndex
+    {
+        get { return _materialIndex; }
+        set
+        {
+            value %= platformMatList.Count;
+            _materialIndex = value;
+        }
+    }
+
 
     #endregion
 
     #region Mono
     void Start()
-    {   
+    {
         CurrentPlatform = _basePlatform;
         SpawnPlatform(true);
-        //GameManager.OnPlayerTouch += SpawnOnTouch;
     }
 
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.A)){
-            SpawnPlatform(false);
-        }
-    }
     #endregion
 
     #region Methods
-    Vector3 CalculateSpawnPos(bool isFirstPlatform){
+    private Vector3 CalculateSpawnPos(bool isFirstPlatform)
+    {
         MeshRenderer renderer = CurrentPlatform.GetComponent<MeshRenderer>();
         float zPos = CurrentPlatform.transform.position.z + renderer.bounds.size.z;
 
         float xPos;
-        if(isFirstPlatform){
+        if (isFirstPlatform)
+        {
             xPos = RandomizeFirstXPos();
         }
-        else{
+        else
+        {
             xPos = SpawnPoints[CalculateLeftOrRight()];
         }
 
         return new Vector3(xPos, CurrentPlatform.transform.position.y, zPos);
     }
 
-    int CalculateLeftOrRight(){
+    int CalculateLeftOrRight()
+    {
         PlatformController platformController = CurrentPlatform.GetComponent<PlatformController>();
-        
-        if(platformController.StartPosType == StartPosType.Left){
+
+        if (platformController.StartPosType == StartPosType.Left)
+        {
             return 1;
         }
         return 0;
     }
 
-    float RandomizeFirstXPos(){
-        var randomfloat = UnityEngine.Random.Range(0,1);
+    float RandomizeFirstXPos()
+    {
+        var randomfloat = UnityEngine.Random.Range(0, 1);
 
-        if(randomfloat == 0){
+        if (randomfloat == 0)
+        {
             return SpawnPoints[0];
         }
 
         return SpawnPoints[1];
     }
 
-    float GetCurrentPlatformSizeX(){
+    float GetCurrentPlatformSizeX()
+    {
         return CurrentPlatform.GetComponent<MeshRenderer>().bounds.size.x;
     }
 
     public void SpawnPlatform(bool isFirstPlatform)
     {
         GameObject platform = _pool.Spawn(CalculateSpawnPos(isFirstPlatform), Quaternion.identity, transform);
-        
+
         PlatformController platformController = platform.GetComponent<PlatformController>();
-        platformController.SetupPlatform(this, isFirstPlatform, GetCurrentPlatformSizeX());
+        platformController.SetupPlatform(this, isFirstPlatform, GetCurrentPlatformSizeX(), GetNextMaterial());
         PreviousPlatform = CurrentPlatform;
         CurrentPlatform = platform;
+    }
+
+    private Material GetNextMaterial(){
+        var material = platformMatList[MaterialIndex];
+        MaterialIndex++;
+        return material;
     }
     #endregion
 

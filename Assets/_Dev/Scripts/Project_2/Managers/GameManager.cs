@@ -116,12 +116,13 @@ namespace General
             {
                 InGameTouch();
             }
-            _isTouched = true;
+            
         }
 
         void InGameTouch()
         {
             if (_isTouched) return;
+            _isTouched = true;
             OnPlayerTouch?.Invoke();
         }
 
