@@ -101,23 +101,35 @@ public class PlatformController : MonoBehaviour
     {
         DOTween.Kill(transform);
         CheckPlatform();
+        GameManager.OnPlayerTouch -= StopPlatform;
     }
 
     void CheckPlatform()
     {
         Transform prevPlatform = _platformParentController.PreviousPlatform.transform;
-        var prevSize = prevPlatform.localScale.x;
 
+        var prevSize = prevPlatform.localScale.x;
         var distance = prevPlatform.position.x - transform.position.x;
-        float direction = distance > 0 ? -1f : 1f;
+
+        if(Mathf.Abs(distance) <= GameManager.Instance.DifficultyData.ToleranceDistance){
+            Perfection(prevPlatform);
+            return;
+        }
+
         if (distance >= prevSize)
         {
             Fail();
         }
         else
         {
-            SlicePlatform(distance, direction);
+            SlicePlatform(distance);
         }
+    }
+
+    void Perfection(Transform prevPlatform){
+        transform.position = new Vector3(prevPlatform.position.x, transform.position.y, transform.position.z);
+        _platformParentController.SpawnPlatform(false);
+        //TODO: Effect & Audio.
     }
 
     void Fail()
@@ -126,8 +138,9 @@ public class PlatformController : MonoBehaviour
         GameManager.Instance.NullInGameTouch();
     }
 
-    void SlicePlatform(float distance, float direction)
+    void SlicePlatform(float distance)
     {
+        float direction = distance > 0 ? -1f : 1f;
         float newSize = _platformParentController.PreviousPlatform.transform.localScale.x - Mathf.Abs(distance);
         if (newSize <= 0)
         {
@@ -148,7 +161,7 @@ public class PlatformController : MonoBehaviour
         float fallPlatformXPos = cubeEdge + fallPlatformSize / 2f * direction;
 
         SpawnFallPlatform(fallPlatformSize, fallPlatformXPos);
-        GameManager.OnPlayerTouch -= StopPlatform;
+        
         _platformParentController.SpawnPlatform(false);
     }
 

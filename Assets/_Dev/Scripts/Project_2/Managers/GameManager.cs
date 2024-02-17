@@ -19,15 +19,20 @@ namespace General
         private InputManager.InputListener _listener;
 
         public PlayerController PlayerController;
-        private bool isTouched;
+        private bool _isTouched;
 
         [Space(5)]
+        [Header("Game Data")]
+        public DifficultyData DifficultyData;
+        /* [Space(5)]
         [Header("Hud Panel")]
         [SerializeField] private GameObject _panelView;
 
         [Space(5)]
         [Header("Camera")]
-        public CinemachineVirtualCamera MainCamera;
+        public CinemachineVirtualCamera MainCamera; */
+
+        
 
         #endregion
 
@@ -97,7 +102,7 @@ namespace General
         {
             if (!isDown)
             {
-                isTouched = false;
+                _isTouched = false;
                 return;
             }
 
@@ -111,12 +116,12 @@ namespace General
             {
                 InGameTouch();
             }
-            isTouched = true;
+            _isTouched = true;
         }
 
         void InGameTouch()
         {
-            if (isTouched) return;
+            if (_isTouched) return;
             OnPlayerTouch?.Invoke();
         }
 
