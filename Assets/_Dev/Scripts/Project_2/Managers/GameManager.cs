@@ -19,6 +19,7 @@ namespace General
         private InputManager.InputListener _listener;
 
         public PlayerController PlayerController;
+        private bool isTouched;
 
         [Space(5)]
         [Header("Hud Panel")]
@@ -27,12 +28,11 @@ namespace General
         [Space(5)]
         [Header("Camera")]
         public CinemachineVirtualCamera MainCamera;
-   
+
         #endregion
 
         #region Action
-
-        public Action OnPlayerLevelUp;
+        public static Action OnPlayerTouch;
         public static event Action<bool> OnGameStart;
         public static event Action<bool> OnMovement;
 
@@ -49,6 +49,7 @@ namespace General
 
             OnGameStart = null;
             OnMovement = null;
+            OnPlayerTouch = null;
         }
 
         private void Start()
@@ -68,16 +69,16 @@ namespace General
             IsGameFinished = true;
             IsGameStarted = false;
 
-            OnGameStart?.Invoke(false); 
+            OnGameStart?.Invoke(false);
             OnMovement?.Invoke(false);
 
             if (isWon)
             {
-               
+
             }
             else
             {
-               
+
             }
         }
 
@@ -95,12 +96,28 @@ namespace General
         void Touch(bool isDown)
         {
             if (!isDown)
+            {
+                isTouched = false;
                 return;
+            }
 
+            
             if (!IsGameStarted && !IsGameFinished)
             {
                 GameStart();
+                InGameTouch();
             }
+            else
+            {
+                InGameTouch();
+            }
+            isTouched = true;
+        }
+
+        void InGameTouch()
+        {
+            if (isTouched) return;
+            OnPlayerTouch?.Invoke();
         }
 
         #endregion
