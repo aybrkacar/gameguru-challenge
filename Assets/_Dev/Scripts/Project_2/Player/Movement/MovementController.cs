@@ -9,7 +9,9 @@ public class MovementController : MonoBehaviour
 	public bool IsMovementOpen { get; private set; } = false;
 
 	[SerializeField] protected Transform _forwardMovementObject;
+	[SerializeField] protected Transform _horizontalMovementObject;
 	[SerializeField] private MovementData _movementData;
+	[SerializeField] private PlatformParentController _platformParentController;
 	private InputManager.InputListener _inputListener;
 
 	#endregion
@@ -23,6 +25,7 @@ public class MovementController : MonoBehaviour
 		InputManager.Instance.AddListener(_inputListener);
 
 		GameManager.OnMovement += MovementOpening;
+		GameManager.OnPlayerTouch += MoveHorizontal;
 	}
 
 	private void Update()
@@ -49,6 +52,17 @@ public class MovementController : MonoBehaviour
 	{
 		float currentSpeed = _movementData.MovementSpeed;
 		_forwardMovementObject.transform.position += Vector3.forward * (currentSpeed * Time.deltaTime);
+	}
+
+	public void MoveHorizontal(){
+		Transform currentPlatform = _platformParentController.CurrentPlatform.transform;
+		_horizontalMovementObject.DOLocalMoveX(currentPlatform.transform.position.x, CalculateSpeed(currentPlatform));
+	}
+
+	private float CalculateSpeed(Transform currentPlatform){
+
+		var distance = currentPlatform.transform.position.z - transform.position.z - currentPlatform.localScale.z / 2f;
+		return distance / _movementData.MovementSpeed;
 	}
 
 	#endregion

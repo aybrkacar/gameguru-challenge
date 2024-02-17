@@ -100,36 +100,49 @@ public class PlatformController : MonoBehaviour
     public void StopPlatform()
     {
         DOTween.Kill(transform);
-        SlicePlatform();
+        CheckPlatform();
     }
 
-    void SlicePlatform()
+    void CheckPlatform()
     {
         Transform prevPlatform = _platformParentController.PreviousPlatform.transform;
-        var prevSize = prevPlatform.GetComponent<MeshRenderer>().bounds.size.x;
+        var prevSize = prevPlatform.localScale.x;
+
         var distance = prevPlatform.position.x - transform.position.x;
         float direction = distance > 0 ? -1f : 1f;
         if (distance >= prevSize)
         {
-            //TODO End Platform Creation
-            gameObject.AddComponent<Rigidbody>();
-            Debug.Log("Platform Fall");
+            Fail();
         }
         else
         {
             SlicePlatform(distance, direction);
         }
+    }
 
+    void Fail()
+    {
+        gameObject.AddComponent<Rigidbody>();
+        GameManager.Instance.NullInGameTouch();
     }
 
     void SlicePlatform(float distance, float direction)
     {
         float newSize = _platformParentController.PreviousPlatform.transform.localScale.x - Mathf.Abs(distance);
-        float fallPlatformSize = transform.localScale.z - newSize;
+        if (newSize <= 0)
+        {
+            Fail();
+            return;
+        }
+
+        float fallPlatformSize = transform.localScale.x - newSize;
+        Debug.Log("fall size:" + fallPlatformSize);
 
         float newXPosition = _platformParentController.PreviousPlatform.transform.position.x - (distance / 2);
         transform.localScale = new Vector3(newSize, transform.localScale.y, transform.localScale.z);
         transform.position = new Vector3(newXPosition, transform.position.y, transform.position.z);
+
+
 
         float cubeEdge = transform.position.x + (newSize / 2f * direction);
         float fallPlatformXPos = cubeEdge + fallPlatformSize / 2f * direction;
@@ -143,10 +156,11 @@ public class PlatformController : MonoBehaviour
     private void SpawnFallPlatform(float fallPlatformSize, float fallPlatformXPos)
     {
         var fallPlatform = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        SetUpFallPlatform(fallPlatform,fallPlatformSize,fallPlatformXPos);
+        SetUpFallPlatform(fallPlatform, fallPlatformSize, fallPlatformXPos);
     }
 
-    void SetUpFallPlatform(GameObject platform, float fallPlatformSize, float fallPlatformXPos){
+    void SetUpFallPlatform(GameObject platform, float fallPlatformSize, float fallPlatformXPos)
+    {
         platform.transform.localScale = new Vector3(fallPlatformSize, transform.localScale.y, transform.localScale.z);
         platform.transform.position = new Vector3(fallPlatformXPos, transform.position.y, transform.position.z);
 

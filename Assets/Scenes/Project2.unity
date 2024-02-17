@@ -5430,7 +5430,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _forwardMovementObject: {fileID: 758346946}
+  _horizontalMovementObject: {fileID: 1313552599}
   _movementData: {fileID: 11400000, guid: 584a34f406b5cc440ad5b2ed08d5c23a, type: 2}
+  _platformParentController: {fileID: 1492802274}
 --- !u!114 &758346949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10018,10 +10020,11 @@ MonoBehaviour:
   _basePlatform: {fileID: 1782359466}
   _pool: {fileID: 901005448}
   _spawnedPlatformsCount: 0
-  _currentPlatform: {fileID: 0}
+  CurrentPlatform: {fileID: 0}
   SpawnPoints:
   - -7
   - 7
+  PreviousPlatform: {fileID: 0}
 --- !u!1 &1510769142
 GameObject:
   m_ObjectHideFlags: 0

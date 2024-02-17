@@ -120,6 +120,10 @@ namespace General
             OnPlayerTouch?.Invoke();
         }
 
+        public void NullInGameTouch(){
+            OnPlayerTouch = null;
+        }
+
         #endregion
 
 
