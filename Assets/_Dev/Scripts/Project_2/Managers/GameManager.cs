@@ -7,6 +7,7 @@ using Singleton;
 using System.Collections;
 using Cinemachine;
 using GameData;
+using Project2.UI;
 
 namespace Project2.General
 {
@@ -27,16 +28,16 @@ namespace Project2.General
         public DifficultyData DifficultyData;
 
         [Space(5)]
-        [Header("Levels")]
-        public GameObject LevelPrefab;
-
-        /* [Space(5)]
         [Header("Hud Panel")]
-        [SerializeField] private GameObject _panelView;
-         */
+        public LevelCanvasManager LevelCanvasManager;
+        
         [Space(5)]
         [Header("Camera")]
         public CameraManager CameraManager;
+
+        [Space(5)]
+        [Header("Camera")]
+        public AudioManager AudioManager;
 
         
 

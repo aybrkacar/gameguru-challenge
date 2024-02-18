@@ -123,6 +123,7 @@ public class PlatformController : MonoBehaviour
         if (Mathf.Abs(distance) <= GameManager.Instance.DifficultyData.ToleranceDistance)
         {
             Perfection(prevPlatform);
+            GameManager.Instance.AudioManager.PlaySound(true);
         }
         else
         {
@@ -133,6 +134,7 @@ public class PlatformController : MonoBehaviour
             else
             {
                 SlicePlatform(distance);
+                GameManager.Instance.AudioManager.PlaySound(false);
             }
         }
         //GameManager.OnPlayerTouch -= StopPlatform;
@@ -167,6 +169,7 @@ public class PlatformController : MonoBehaviour
         float newXPosition = PlatformParentController.PreviousPlatform.transform.position.x - (distance / 2);
         transform.localScale = new Vector3(newSize, transform.localScale.y, transform.localScale.z);
         transform.position = new Vector3(newXPosition, transform.position.y, transform.position.z);
+        GameManager.Instance.PlayerController.GetComponent<MovementController>().MoveHorizontal();
 
         float cubeEdge = transform.position.x + (newSize / 2f * direction);
         float fallPlatformXPos = cubeEdge + fallPlatformSize / 2f * direction;

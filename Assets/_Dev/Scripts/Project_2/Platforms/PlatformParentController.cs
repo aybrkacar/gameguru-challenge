@@ -49,7 +49,7 @@ public class PlatformParentController : MonoBehaviour
     }
     void Start()
     {
-        
+
         //SpawnPlatform(true);
     }
 
@@ -109,9 +109,8 @@ public class PlatformParentController : MonoBehaviour
 
     public void SpawnPlatform(bool isFirstPlatform)
     {
-        Debug.Log("Spawn'a girdi");
         if (_spawnedPlatformsCount >= LevelManager.Instance.CurrentLevelData.LevelPlatformCount) return;
-        Debug.Log("Spawn etti");
+
         GameObject platform = _pool.Spawn(CalculateSpawnPos(isFirstPlatform), Quaternion.identity, transform);
         _spawnedPlatformsCount++;
         PlatformController platformController = platform.GetComponent<PlatformController>();
@@ -134,7 +133,7 @@ public class PlatformParentController : MonoBehaviour
         _spawnedPlatformsCount = 0;
         SpawnEndGame();
         SpawnPlatform(true);
-        
+
     }
 
     void SpawnEndGame()
@@ -146,12 +145,7 @@ public class PlatformParentController : MonoBehaviour
     void SetCheckerPos()
     {
         var platformCount = LevelManager.Instance.CurrentLevelData.LevelPlatformCount;
-        Debug.Log(platformCount);
-        Debug.Log(_currentEndGame.transform.position);
-        Debug.Log(BasePlatform.transform.localScale.z * platformCount * Vector3.forward);
-        _currentEndGame.transform.position += (Vector3.forward * BasePlatform.transform.position.z) + BasePlatform.transform.localScale.z * platformCount * Vector3.forward ;
-        //_currentEndGame.GetComponent<EndGameController>().BasePlatform.GetComponent<PlatformController>().PlatformParentController = this; 
-        
+        _currentEndGame.transform.position += (Vector3.forward * BasePlatform.transform.position.z) + BasePlatform.transform.localScale.z * platformCount * Vector3.forward;
     }
     #endregion
 

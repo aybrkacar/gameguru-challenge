@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using GameData;
+using Microsoft.Unity.VisualStudio.Editor;
 using Project2.General;
 using TMPro;
 using UnityEngine;
@@ -25,8 +26,14 @@ namespace Project2.UI
         [Header("UI")]
         public RectTransform MovingObject;
         public RectTransform StarsParent;
+        public List<RectTransform> UIStarImageList;
+        public List<RectTransform> CameraStarImageList;
+        public int StarIndex = 0;
         public TextMeshProUGUI LevelText;
         public string LevelTextPrefix;
+
+        public Transform MoneyUITransform;
+        public TextMeshProUGUI MoneyText;
 
 
         private WaitForSeconds canvasDelay;
@@ -40,6 +47,8 @@ namespace Project2.UI
             LevelManager.OnLevelCompleted += DisplayWinCanvas;
             LevelManager.OnLevelFailed += DisplayFailCanvas;
             LevelManager.OnLevelStarted += UpdateLevelText;
+            LevelManager.OnLevelStarted += ResetStars;
+            LevelManager.OnLevelStarted += UpdateMoney;
 
             DynamicCanvas.SetActive(true);
             canvasDelay = new WaitForSeconds(EndGameCanvasDelay);
@@ -50,6 +59,8 @@ namespace Project2.UI
             LevelManager.OnLevelStarted -= HideAllCanvases;
             LevelManager.OnLevelCompleted -= DisplayWinCanvas;
             LevelManager.OnLevelFailed -= DisplayFailCanvas;
+            LevelManager.OnLevelStarted -= ResetStars;
+            LevelManager.OnLevelStarted -= UpdateMoney;
         }
         #endregion
 
@@ -59,10 +70,32 @@ namespace Project2.UI
             MovingObject.DOAnchorPosY(-110f, 0.7f);
         }
 
-        void MoveStars()
+        public void FillStar()
         {
-            StarsParent.DOAnchorPosY(130f, 0.7f);
-            StarsParent.DOScale(1f, 0.7f);
+            if (StarIndex >= CameraStarImageList.Count) return;
+
+            RectTransform rectTransformCamera = CameraStarImageList[StarIndex];
+            RectTransform rectTransformUI = UIStarImageList[StarIndex];
+
+            var uiStarImageTransform = rectTransformUI.GetChild(0);
+            uiStarImageTransform.gameObject.SetActive(true);
+            uiStarImageTransform.DOScale(1f, 0.4f);
+
+            var cameraStarImageTransform = rectTransformCamera.GetChild(0);
+            cameraStarImageTransform.gameObject.SetActive(true);
+            cameraStarImageTransform.DOScale(1f, 0.4f);
+            StarIndex++;
+        }
+
+        public Transform GetCurrentStarTransform()
+        {
+            return CameraStarImageList[StarIndex];
+        }
+
+        public void ResetStars()
+        {
+            CameraStarImageList.ForEach(rects => rects.GetChild(0).gameObject.SetActive(false));
+            UIStarImageList.ForEach(rects => rects.GetChild(0).gameObject.SetActive(false));
         }
 
         void MoveDynamicObjectsDefault()
@@ -70,11 +103,6 @@ namespace Project2.UI
             MovingObject.DOAnchorPosY(0f, 0.7f);
         }
 
-        void MoveStarDefault()
-        {
-            StarsParent.DOAnchorPosY(329f, 0.7f);
-            StarsParent.DOScale(.5f, 0.7f);
-        }
 
         private IEnumerator Victory()
         {
@@ -83,7 +111,6 @@ namespace Project2.UI
             WinCanvas.SetActive(true);
             TouchCanvas.SetActive(false);
             MoveDynamicObjects();
-            MoveStars();
         }
 
         private IEnumerator Fail()
@@ -113,13 +140,26 @@ namespace Project2.UI
             DynamicCanvas.SetActive(true);
             TouchCanvas.SetActive(true);
 
-            MoveStarDefault();
             MoveDynamicObjectsDefault();
         }
 
         void UpdateLevelText()
         {
             LevelText.text = $"{LevelTextPrefix} {SaveData.Level + 1}";
+        }
+
+        public void UpdateMoney()
+        {
+            ScaleMoney();
+            MoneyText.text = SaveData.MoneyValue.ToString("F0");
+        }
+
+        void ScaleMoney()
+        {
+            if (!DOTween.IsTweening(MoneyUITransform))
+            {
+                MoneyUITransform.DOPunchScale(Vector3.one * 0.1f, 0.3f);
+            }
         }
 
 

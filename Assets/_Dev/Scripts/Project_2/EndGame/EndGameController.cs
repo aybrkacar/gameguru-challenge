@@ -15,7 +15,6 @@ public class EndGameController : MonoBehaviour
     }
 
     public void LevelCompleted(){
-        Debug.Log("EndGame Level Complete");
         PlatformParentController.CurrentPlatform = BasePlatform;
         PlatformParentController.BasePlatform = BasePlatform;
         PlatformParentController.PreviousPlatform = BasePlatform;
