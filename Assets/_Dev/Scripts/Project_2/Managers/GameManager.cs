@@ -69,6 +69,7 @@ namespace Project2.General
             _listener = new InputManager.InputListener();
             _listener.TouchEvent += Touch;
             InputManager.Instance.AddListener(_listener);
+            LevelCanvasManager.UpdateLevelText();
         }
 
         #endregion

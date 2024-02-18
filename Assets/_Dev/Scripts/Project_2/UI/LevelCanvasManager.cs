@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using GameData;
-using Microsoft.Unity.VisualStudio.Editor;
 using Project2.General;
 using TMPro;
 using UnityEngine;
@@ -143,7 +142,7 @@ namespace Project2.UI
             MoveDynamicObjectsDefault();
         }
 
-        void UpdateLevelText()
+        public void UpdateLevelText()
         {
             LevelText.text = $"{LevelTextPrefix} {SaveData.Level + 1}";
         }
