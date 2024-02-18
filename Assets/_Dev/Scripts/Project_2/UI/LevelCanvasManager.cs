@@ -93,6 +93,7 @@ namespace Project2.UI
 
         public void ResetStars()
         {
+            StarIndex = 0;
             CameraStarImageList.ForEach(rects => rects.GetChild(0).gameObject.SetActive(false));
             UIStarImageList.ForEach(rects => rects.GetChild(0).gameObject.SetActive(false));
         }

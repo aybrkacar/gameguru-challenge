@@ -25,7 +25,7 @@ public class StarController : MonoBehaviour, ICollectable
         PlayEffect();
         DOTween.Kill(transform);
         transform.SetParent(GameManager.Instance.LevelCanvasManager.GetCurrentStarTransform());
-        transform.DOScale(0.2f, moveTime);
+        transform.DOScale(0.6f, moveTime);
         transform.DOLocalMove(Vector3.zero, moveTime).OnComplete(()=>{
             GameManager.Instance.LevelCanvasManager.FillStar();
             Debug.Log("Fill Çalıştı");

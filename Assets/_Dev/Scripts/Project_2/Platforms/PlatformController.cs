@@ -23,13 +23,13 @@ public class PlatformController : MonoBehaviour
     #region Mono
     private void OnEnable()
     {
-        if(_isBasePlatform) return;
+        if (_isBasePlatform) return;
         GameManager.OnPlayerTouch += StopPlatform;
     }
 
     private void OnDisable()
     {
-        if(_isBasePlatform) return;
+        if (_isBasePlatform) return;
         GameManager.OnPlayerTouch -= StopPlatform;
     }
 
@@ -105,12 +105,12 @@ public class PlatformController : MonoBehaviour
     //WHEN TOUCH
     public void StopPlatform()
     {
-        if(_isStopped) return;
+        if (_isStopped) return;
         _isStopped = true;
 
         DOTween.Kill(transform);
         CheckPlatform();
-        
+
     }
 
     void CheckPlatform()
@@ -145,7 +145,7 @@ public class PlatformController : MonoBehaviour
     {
         transform.position = new Vector3(prevPlatform.position.x, transform.position.y, transform.position.z);
         PlatformParentController.SpawnPlatform(false);
-        //TODO: Effect & Audio.
+        StartColorTween();
     }
 
     void Fail()
@@ -195,6 +195,14 @@ public class PlatformController : MonoBehaviour
 
         platform.AddComponent<Rigidbody>();
         Destroy(platform, 1f);
+    }
+
+    public void StartColorTween()
+    {   
+        var originalColor = GetComponent<Renderer>().material.color;
+        GetComponent<Renderer>().material.DOColor(Color.white, 0.15f).OnComplete(()=>{
+            GetComponent<Renderer>().material.DOColor(originalColor, 0.15f);
+        });
     }
     #endregion
 }

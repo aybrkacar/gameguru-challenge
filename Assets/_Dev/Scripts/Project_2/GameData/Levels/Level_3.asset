@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _levelIndex: 3
   _levelPlatformCount: 15
+  _starCount: 3
+  _coinCount: 4

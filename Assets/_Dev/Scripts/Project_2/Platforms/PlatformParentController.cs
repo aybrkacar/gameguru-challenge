@@ -19,8 +19,9 @@ public class PlatformParentController : MonoBehaviour
     [Space(5)]
     [Header("Level")]
     public GameObject BasePlatform;
+    public GameObject CurrentEndGame;
+
     [SerializeField] private GameObject _endGameCheckerPrefab;
-    [SerializeField] private GameObject _currentEndGame;
 
     [Space(5)]
     [Header("Materials")]
@@ -139,13 +140,13 @@ public class PlatformParentController : MonoBehaviour
     void SpawnEndGame()
     {
         GameObject endGame = Instantiate(_endGameCheckerPrefab, transform);
-        _currentEndGame = endGame;
+        CurrentEndGame = endGame;
         SetCheckerPos();
     }
     void SetCheckerPos()
     {
         var platformCount = LevelManager.Instance.CurrentLevelData.LevelPlatformCount;
-        _currentEndGame.transform.position += (Vector3.forward * BasePlatform.transform.position.z) + BasePlatform.transform.localScale.z * platformCount * Vector3.forward;
+        CurrentEndGame.transform.position += (Vector3.forward * BasePlatform.transform.position.z) + BasePlatform.transform.localScale.z * platformCount * Vector3.forward;
     }
     #endregion
 
