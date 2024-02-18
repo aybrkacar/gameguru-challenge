@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using General;
+using Project2.General;
 
 public class EnvironmentController : MonoBehaviour
 {

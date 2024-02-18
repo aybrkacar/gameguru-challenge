@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Lean.Pool;
-using System;
-using System.Linq;
-using General;
+using Project2.General;
 
 public class PlatformParentController : MonoBehaviour
 {

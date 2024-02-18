@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Singleton;
 using UnityEngine;
 
-namespace General
+namespace Project2.General
 {
     public class InputManager : NonPersistentSingleton<InputManager>
     {

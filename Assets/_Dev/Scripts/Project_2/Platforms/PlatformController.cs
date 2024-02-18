@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using General;
+using Project2.General;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
+
 
 public class PlatformController : MonoBehaviour
 {

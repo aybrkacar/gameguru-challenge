@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using General;
+using Project2.General;
 using UnityEngine;
 
 namespace GameData

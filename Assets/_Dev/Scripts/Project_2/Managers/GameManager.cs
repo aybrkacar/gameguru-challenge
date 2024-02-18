@@ -8,7 +8,7 @@ using System.Collections;
 using Cinemachine;
 using GameData;
 
-namespace General
+namespace Project2.General
 {
     public class GameManager : NonPersistentSingleton<GameManager>
     {
@@ -33,10 +33,10 @@ namespace General
         /* [Space(5)]
         [Header("Hud Panel")]
         [SerializeField] private GameObject _panelView;
-
+         */
         [Space(5)]
         [Header("Camera")]
-        public CinemachineVirtualCamera MainCamera; */
+        public CameraManager CameraManager;
 
         
 
@@ -84,11 +84,13 @@ namespace General
 
             if (isWon)
             {
-
+                CameraManager.CamState = CameraState.Win;
+                LevelManager.Instance.LevelCompleted();
             }
             else
             {
-
+                CameraManager.CamState = CameraState.Death;
+                LevelManager.Instance.LevelFailed();
             }
         }
 

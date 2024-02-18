@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using General;
+using Project2.General;
 using TMPro;
 
 
@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         GameManager.OnGameStart += PlayerStart;
+        
     }
 
     #endregion
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
         if (isOpen is true)
         {
             StartCoroutine(SpeedUpPlayerAnimation());
+            CheckDeath();
         }
     }
 
@@ -45,6 +47,27 @@ public class PlayerController : MonoBehaviour
     public void SetIdleAnimation()
     {
         playerAnimatorController.SetPlayerAnimationSpeed(0f);
+    }
+
+    public void SetFallAnimation(){
+        playerAnimatorController.TriggerDeathAnim();
+    }
+    public void CheckDeath(){
+        StartCoroutine(DeathControl());
+    }
+
+    IEnumerator DeathControl(){
+        WaitForSeconds second = new WaitForSeconds(0.1f);
+        bool isAlive = true;
+        while(isAlive){
+            if(transform.position.y <= -1){
+                isAlive = false;
+                SetFallAnimation();
+                GameManager.Instance.LevelEnd(false);
+            }
+
+            yield return second;
+        }
     }
 
     #endregion

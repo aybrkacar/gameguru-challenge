@@ -4,8 +4,9 @@ using Singleton;
 using UnityEngine;
 using GameData;
 using System;
+using UnityEngine.SceneManagement;
 
-namespace General
+namespace Project2.General
 {
     public class LevelManager : NonPersistentSingleton<LevelManager>
     {
@@ -29,7 +30,8 @@ namespace General
             Initialize();
         }
 
-        private void Start() {
+        private void Start()
+        {
             LevelStarted();
         }
         #endregion
@@ -53,16 +55,30 @@ namespace General
             }
         }
 
-        public void LevelStarted(){
+        public void LevelStarted()
+        {
             OnLevelStarted?.Invoke();
         }
 
-        public void LevelCompleted(){
+        public void LevelCompleted()
+        {
             OnLevelCompleted?.Invoke();
         }
 
-        public void LevelFailed(){
+        public void LevelFailed()
+        {
             OnLevelFailed?.Invoke();
+        }
+
+        public void LoadNextLevel()
+        {
+            SaveData.Level++;
+        }
+
+        public void RestartLevel()
+        {
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(currentSceneIndex);
         }
         #endregion
     }

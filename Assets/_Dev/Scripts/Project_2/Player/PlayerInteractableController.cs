@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using General;
+using Project2.General;
 using UnityEngine;
 using DG.Tweening;
 

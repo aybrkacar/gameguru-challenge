@@ -1,6 +1,6 @@
 using System;
 using DG.Tweening;
-using General;
+using Project2.General;
 using UnityEngine;
 
 public class MovementController : MonoBehaviour
