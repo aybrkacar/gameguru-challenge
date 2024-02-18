@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using _Reusable.Singleton;
+using Singleton;
 using System.Collections;
 using Cinemachine;
+using GameData;
 
 namespace General
 {
@@ -24,6 +25,11 @@ namespace General
         [Space(5)]
         [Header("Game Data")]
         public DifficultyData DifficultyData;
+
+        [Space(5)]
+        [Header("Levels")]
+        public GameObject LevelPrefab;
+
         /* [Space(5)]
         [Header("Hud Panel")]
         [SerializeField] private GameObject _panelView;
@@ -67,7 +73,6 @@ namespace General
         #endregion
 
         #region Methods
-
         public void LevelEnd(bool isWon)
         {
             if (IsGameFinished) return;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace _Reusable.Singleton
+namespace Singleton
 {
     public class NonPersistentSingleton<T> : MonoBehaviour where T : Component
     {

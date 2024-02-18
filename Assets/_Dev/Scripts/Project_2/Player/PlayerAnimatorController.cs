@@ -13,16 +13,16 @@ public class PlayerAnimatorController : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnMovement += StopAnimations;
+        //GameManager.OnMovement += StopAnimations;
     }
 
     private void Start() {
-        GameManager.OnMovement += StopAnimations;
+        //GameManager.OnMovement += StopAnimations;
     }
 
     private void OnDisable()
     {
-        GameManager.OnMovement -= StopAnimations;
+        //GameManager.OnMovement -= StopAnimations;
     }
 
     public void SetPlayerAnimationSpeed(float value)
@@ -30,7 +30,7 @@ public class PlayerAnimatorController : MonoBehaviour
         _animator.SetFloat(_blendAnim, value);
     }
 
-    public void TriggerCheerAnimation()
+    public void TriggerDanceAnimation()
     {
         _animator.SetTrigger(_dance);
     }

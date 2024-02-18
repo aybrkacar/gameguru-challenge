@@ -9,7 +9,6 @@ using General;
 public class PlatformParentController : MonoBehaviour
 {
     #region Variables
-    [SerializeField] private GameObject _basePlatform;
     [SerializeField] private LeanGameObjectPool _pool;
     [SerializeField] private int _spawnedPlatformsCount = 0;
 
@@ -20,15 +19,21 @@ public class PlatformParentController : MonoBehaviour
     public GameObject PreviousPlatform;
 
     [Space(5)]
+    [Header("Level")]
+    [SerializeField] private GameObject _basePlatform;
+    [SerializeField] private GameObject _endGameChecker;
+
+    [Space(5)]
     [Header("Materials")]
-    public List<Material> platformMatList;
+    public List<Material> _platformMatList;
+
     private int _materialIndex = 0;
     public int MaterialIndex
     {
         get { return _materialIndex; }
         set
         {
-            value %= platformMatList.Count;
+            value %= _platformMatList.Count;
             _materialIndex = value;
         }
     }
@@ -37,10 +42,18 @@ public class PlatformParentController : MonoBehaviour
     #endregion
 
     #region Mono
+    private void OnEnable() {
+        LevelManager.OnLevelStarted += SetupLevel;
+    }
     void Start()
-    {
+    {   
+        
         CurrentPlatform = _basePlatform;
         SpawnPlatform(true);
+    }
+
+    private void OnDisable() {
+        LevelManager.OnLevelStarted -= SetupLevel;
     }
 
     #endregion
@@ -94,8 +107,9 @@ public class PlatformParentController : MonoBehaviour
 
     public void SpawnPlatform(bool isFirstPlatform)
     {
+        if(_spawnedPlatformsCount >= LevelManager.Instance.CurrentLevelData.LevelPlatformCount) return;
         GameObject platform = _pool.Spawn(CalculateSpawnPos(isFirstPlatform), Quaternion.identity, transform);
-
+        _spawnedPlatformsCount++;
         PlatformController platformController = platform.GetComponent<PlatformController>();
         platformController.SetupPlatform(this, isFirstPlatform, GetCurrentPlatformSizeX(), GetNextMaterial());
         PreviousPlatform = CurrentPlatform;
@@ -103,9 +117,20 @@ public class PlatformParentController : MonoBehaviour
     }
 
     private Material GetNextMaterial(){
-        var material = platformMatList[MaterialIndex];
+        var material = _platformMatList[MaterialIndex];
         MaterialIndex++;
         return material;
+    }
+    #endregion
+
+    #region Level Methods
+    void SetupLevel(){
+        SetCheckerPos();
+    }
+
+    void SetCheckerPos(){
+        var platformCount = LevelManager.Instance.CurrentLevelData.LevelPlatformCount;
+        _endGameChecker.transform.position = _endGameChecker.transform.position + _basePlatform.transform.localScale.z * platformCount * Vector3.forward;
     }
     #endregion
 
