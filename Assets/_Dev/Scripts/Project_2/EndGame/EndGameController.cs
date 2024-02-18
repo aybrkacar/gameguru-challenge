@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Project2.General;
 using UnityEngine;
 
 public class EndGameController : MonoBehaviour
 {
     public Transform MovePoint;
+    public PlatformParentController PlatformParentController;
+    public GameObject BasePlatform;
 
-    void Start()
-    {
-        
+    private void Start() {
+        PlatformParentController = transform.parent.GetComponent<PlatformParentController>();
+        LevelManager.OnLevelCompleted += LevelCompleted;
     }
 
-    void Update()
-    {
-        
+    public void LevelCompleted(){
+        Debug.Log("EndGame Level Complete");
+        PlatformParentController.CurrentPlatform = BasePlatform;
+        PlatformParentController.BasePlatform = BasePlatform;
+        PlatformParentController.PreviousPlatform = BasePlatform;
+        LevelManager.OnLevelCompleted -= LevelCompleted;
     }
-}
+}   

@@ -29,7 +29,11 @@ namespace Project2.General
         #endregion
         void Start()
         {
+            LevelManager.OnLevelStarted += StopCamera;
+        }
 
+        private void OnDisable() {
+            LevelManager.OnLevelStarted -= StopCamera;
         }
 
         private void StateBehaviour()
@@ -87,7 +91,7 @@ namespace Project2.General
         {
             yield return new WaitForSeconds(delayTime);
 
-            WinCameraAnimator.SetTrigger("Rotate");
+            WinCameraAnimator.SetBool("Rotate", true);
         }
 
         IEnumerator DelayedFollowCancel(float delayTime)
@@ -95,6 +99,10 @@ namespace Project2.General
             yield return new WaitForSeconds(delayTime);
 
             MainCamera.Follow = null;
+        }
+
+        void StopCamera(){
+            WinCameraAnimator.SetBool("Rotate", false);
         }
     }
 

@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using GameData;
 using Project2.General;
+using TMPro;
 using UnityEngine;
 
 namespace Project2.UI
@@ -23,6 +25,8 @@ namespace Project2.UI
         [Header("UI")]
         public RectTransform MovingObject;
         public RectTransform StarsParent;
+        public TextMeshProUGUI LevelText;
+        public string LevelTextPrefix;
 
 
         private WaitForSeconds canvasDelay;
@@ -35,6 +39,7 @@ namespace Project2.UI
             LevelManager.OnLevelStarted += HideAllCanvases;
             LevelManager.OnLevelCompleted += DisplayWinCanvas;
             LevelManager.OnLevelFailed += DisplayFailCanvas;
+            LevelManager.OnLevelStarted += UpdateLevelText;
 
             DynamicCanvas.SetActive(true);
             canvasDelay = new WaitForSeconds(EndGameCanvasDelay);
@@ -42,7 +47,7 @@ namespace Project2.UI
 
         private void OnDestroy()
         {
-             LevelManager.OnLevelStarted -= HideAllCanvases;
+            LevelManager.OnLevelStarted -= HideAllCanvases;
             LevelManager.OnLevelCompleted -= DisplayWinCanvas;
             LevelManager.OnLevelFailed -= DisplayFailCanvas;
         }
@@ -58,6 +63,17 @@ namespace Project2.UI
         {
             StarsParent.DOAnchorPosY(130f, 0.7f);
             StarsParent.DOScale(1f, 0.7f);
+        }
+
+        void MoveDynamicObjectsDefault()
+        {
+            MovingObject.DOAnchorPosY(0f, 0.7f);
+        }
+
+        void MoveStarDefault()
+        {
+            StarsParent.DOAnchorPosY(329f, 0.7f);
+            StarsParent.DOScale(.5f, 0.7f);
         }
 
         private IEnumerator Victory()
@@ -96,6 +112,14 @@ namespace Project2.UI
 
             DynamicCanvas.SetActive(true);
             TouchCanvas.SetActive(true);
+
+            MoveStarDefault();
+            MoveDynamicObjectsDefault();
+        }
+
+        void UpdateLevelText()
+        {
+            LevelText.text = $"{LevelTextPrefix} {SaveData.Level + 1}";
         }
 
 

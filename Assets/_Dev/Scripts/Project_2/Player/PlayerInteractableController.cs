@@ -12,7 +12,7 @@ public class PlayerInteractableController : MonoBehaviour
 
         transform.DOMove(movePoint.position, 1f).OnComplete(() => {
             PlayerAnimatorController playerAnimatorController = GetComponent<PlayerAnimatorController>();
-            playerAnimatorController.TriggerDanceAnimation();
+            playerAnimatorController.PlayDanceAnimation();
         });
     }
 

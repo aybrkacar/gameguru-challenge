@@ -14,6 +14,7 @@ public class PlayerAnimatorController : MonoBehaviour
     private void OnEnable()
     {
         //GameManager.OnMovement += StopAnimations;
+        LevelManager.OnLevelStarted += StopDanceAnimation;
     }
 
     private void Start() {
@@ -23,6 +24,7 @@ public class PlayerAnimatorController : MonoBehaviour
     private void OnDisable()
     {
         //GameManager.OnMovement -= StopAnimations;
+        LevelManager.OnLevelStarted -= StopDanceAnimation;
     }
 
     public void SetPlayerAnimationSpeed(float value)
@@ -30,9 +32,13 @@ public class PlayerAnimatorController : MonoBehaviour
         _animator.SetFloat(_blendAnim, value);
     }
 
-    public void TriggerDanceAnimation()
+    public void PlayDanceAnimation()
     {
-        _animator.SetTrigger(_dance);
+        _animator.SetBool(_dance, true);
+    }
+    public void StopDanceAnimation(){
+        _animator.SetBool(_dance, false);
+        SetPlayerAnimationSpeed(0);
     }
 
     public void TriggerDeathAnim()

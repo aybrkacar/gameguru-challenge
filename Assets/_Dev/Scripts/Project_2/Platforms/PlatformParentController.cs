@@ -18,8 +18,9 @@ public class PlatformParentController : MonoBehaviour
 
     [Space(5)]
     [Header("Level")]
-    [SerializeField] private GameObject _basePlatform;
-    [SerializeField] private GameObject _endGameChecker;
+    public GameObject BasePlatform;
+    [SerializeField] private GameObject _endGameCheckerPrefab;
+    [SerializeField] private GameObject _currentEndGame;
 
     [Space(5)]
     [Header("Materials")]
@@ -40,17 +41,20 @@ public class PlatformParentController : MonoBehaviour
     #endregion
 
     #region Mono
-    private void OnEnable() {
+    private void OnEnable()
+    {
+        CurrentPlatform = BasePlatform;
+        PreviousPlatform = BasePlatform;
         LevelManager.OnLevelStarted += SetupLevel;
     }
     void Start()
-    {   
+    {
         
-        CurrentPlatform = _basePlatform;
-        SpawnPlatform(true);
+        //SpawnPlatform(true);
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         LevelManager.OnLevelStarted -= SetupLevel;
     }
 
@@ -105,7 +109,9 @@ public class PlatformParentController : MonoBehaviour
 
     public void SpawnPlatform(bool isFirstPlatform)
     {
-        if(_spawnedPlatformsCount >= LevelManager.Instance.CurrentLevelData.LevelPlatformCount) return;
+        Debug.Log("Spawn'a girdi");
+        if (_spawnedPlatformsCount >= LevelManager.Instance.CurrentLevelData.LevelPlatformCount) return;
+        Debug.Log("Spawn etti");
         GameObject platform = _pool.Spawn(CalculateSpawnPos(isFirstPlatform), Quaternion.identity, transform);
         _spawnedPlatformsCount++;
         PlatformController platformController = platform.GetComponent<PlatformController>();
@@ -114,7 +120,8 @@ public class PlatformParentController : MonoBehaviour
         CurrentPlatform = platform;
     }
 
-    private Material GetNextMaterial(){
+    private Material GetNextMaterial()
+    {
         var material = _platformMatList[MaterialIndex];
         MaterialIndex++;
         return material;
@@ -122,13 +129,29 @@ public class PlatformParentController : MonoBehaviour
     #endregion
 
     #region Level Methods
-    void SetupLevel(){
-        SetCheckerPos();
+    void SetupLevel()
+    {
+        _spawnedPlatformsCount = 0;
+        SpawnEndGame();
+        SpawnPlatform(true);
+        
     }
 
-    void SetCheckerPos(){
+    void SpawnEndGame()
+    {
+        GameObject endGame = Instantiate(_endGameCheckerPrefab, transform);
+        _currentEndGame = endGame;
+        SetCheckerPos();
+    }
+    void SetCheckerPos()
+    {
         var platformCount = LevelManager.Instance.CurrentLevelData.LevelPlatformCount;
-        _endGameChecker.transform.position = _endGameChecker.transform.position + _basePlatform.transform.localScale.z * platformCount * Vector3.forward;
+        Debug.Log(platformCount);
+        Debug.Log(_currentEndGame.transform.position);
+        Debug.Log(BasePlatform.transform.localScale.z * platformCount * Vector3.forward);
+        _currentEndGame.transform.position += (Vector3.forward * BasePlatform.transform.position.z) + BasePlatform.transform.localScale.z * platformCount * Vector3.forward ;
+        //_currentEndGame.GetComponent<EndGameController>().BasePlatform.GetComponent<PlatformController>().PlatformParentController = this; 
+        
     }
     #endregion
 

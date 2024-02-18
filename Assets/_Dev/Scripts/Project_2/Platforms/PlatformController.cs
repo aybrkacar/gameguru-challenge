@@ -10,7 +10,7 @@ using UnityEngine;
 public class PlatformController : MonoBehaviour
 {
     #region Variables
-    public PlatformParentController _platformParentController;
+    public PlatformParentController PlatformParentController;
     public StartPosType StartPosType;
 
     //Tween Settings
@@ -38,7 +38,7 @@ public class PlatformController : MonoBehaviour
     #region Methods
     public void SetupPlatform(PlatformParentController platformParentController, bool isFirstPlatform, float sizeX, Material mat)
     {
-        _platformParentController = platformParentController;
+        PlatformParentController = platformParentController;
         SetScale(sizeX);
         SetStartType();
         SetMaterial(mat);
@@ -71,28 +71,28 @@ public class PlatformController : MonoBehaviour
     //MOVEMENT
     public void MovePlatform(bool isFirstPlatform)
     {
-        if (!_platformParentController) return;
+        if (!PlatformParentController) return;
 
         if (StartPosType == StartPosType.Left)
         {
             if (isFirstPlatform)
             {
-                MoveTween(_platformParentController.SpawnPoints[1], -1);
+                MoveTween(PlatformParentController.SpawnPoints[1], -1);
             }
             else
             {
-                MoveTween(_platformParentController.SpawnPoints[1], 1);
+                MoveTween(PlatformParentController.SpawnPoints[1], 1);
             }
         }
         else
         {
             if (isFirstPlatform)
             {
-                MoveTween(_platformParentController.SpawnPoints[0], -1);
+                MoveTween(PlatformParentController.SpawnPoints[0], -1);
             }
             else
             {
-                MoveTween(_platformParentController.SpawnPoints[0], 1);
+                MoveTween(PlatformParentController.SpawnPoints[0], 1);
             }
         }
     }
@@ -115,8 +115,7 @@ public class PlatformController : MonoBehaviour
 
     void CheckPlatform()
     {
-        Debug.Log(gameObject.name + " çalıştı" );
-        Transform prevPlatform = _platformParentController.PreviousPlatform.transform;
+        Transform prevPlatform = PlatformParentController.PreviousPlatform.transform;
 
         var prevSize = prevPlatform.localScale.x;
         var distance = prevPlatform.position.x - transform.position.x;
@@ -143,8 +142,7 @@ public class PlatformController : MonoBehaviour
     void Perfection(Transform prevPlatform)
     {
         transform.position = new Vector3(prevPlatform.position.x, transform.position.y, transform.position.z);
-        _platformParentController.SpawnPlatform(false);
-        Debug.Log("çalıştı2");
+        PlatformParentController.SpawnPlatform(false);
         //TODO: Effect & Audio.
     }
 
@@ -157,7 +155,7 @@ public class PlatformController : MonoBehaviour
     void SlicePlatform(float distance)
     {
         float direction = distance > 0 ? -1f : 1f;
-        float newSize = _platformParentController.PreviousPlatform.transform.localScale.x - Mathf.Abs(distance);
+        float newSize = PlatformParentController.PreviousPlatform.transform.localScale.x - Mathf.Abs(distance);
         if (newSize <= 0)
         {
             Fail();
@@ -165,20 +163,17 @@ public class PlatformController : MonoBehaviour
         }
 
         float fallPlatformSize = transform.localScale.x - newSize;
-        Debug.Log("fall size:" + fallPlatformSize);
 
-        float newXPosition = _platformParentController.PreviousPlatform.transform.position.x - (distance / 2);
+        float newXPosition = PlatformParentController.PreviousPlatform.transform.position.x - (distance / 2);
         transform.localScale = new Vector3(newSize, transform.localScale.y, transform.localScale.z);
         transform.position = new Vector3(newXPosition, transform.position.y, transform.position.z);
-
-
 
         float cubeEdge = transform.position.x + (newSize / 2f * direction);
         float fallPlatformXPos = cubeEdge + fallPlatformSize / 2f * direction;
 
         SpawnFallPlatform(fallPlatformSize, fallPlatformXPos);
 
-        _platformParentController.SpawnPlatform(false);
+        PlatformParentController.SpawnPlatform(false);
     }
 
 

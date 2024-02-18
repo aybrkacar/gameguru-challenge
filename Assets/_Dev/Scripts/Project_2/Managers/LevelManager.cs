@@ -73,6 +73,10 @@ namespace Project2.General
         public void LoadNextLevel()
         {
             SaveData.Level++;
+            SetupLevelIndex();
+            GameManager.Instance.CameraManager.CamState = CameraState.Follow;
+            GameManager.Instance.IsGameFinished = false;
+            LevelStarted();
         }
 
         public void RestartLevel()
