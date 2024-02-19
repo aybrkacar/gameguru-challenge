@@ -5946,6 +5946,9 @@ MonoBehaviour:
     type: 3}
   _movementData: {fileID: 11400000, guid: 584a34f406b5cc440ad5b2ed08d5c23a, type: 2}
   _platformParent: {fileID: 1492802274}
+  _emptyCount: 0
+  _starCount: 0
+  _coinCount: 0
   _emptyPossibility: 0
   _starPossibility: 0
   _coinPossibility: 0
@@ -8887,12 +8890,12 @@ PrefabInstance:
     - target: {fileID: 157222997603204048, guid: 6a2178c841dd35d4a86a3cc4dd441c57,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.089434214
+      value: -0.08943426
       objectReference: {fileID: 0}
     - target: {fileID: 157222997603204048, guid: 6a2178c841dd35d4a86a3cc4dd441c57,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.024517639
+      value: 0.024517646
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a2178c841dd35d4a86a3cc4dd441c57, type: 3}
