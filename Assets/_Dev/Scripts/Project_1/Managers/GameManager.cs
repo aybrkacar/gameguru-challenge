@@ -18,7 +18,7 @@ namespace Project1.General
         #endregion
 
         #region Action
-
+        public static event Action OnMatched;
         #endregion
 
         #region MonoBehaviour
@@ -29,11 +29,12 @@ namespace Project1.General
 
             DOTween.KillAll();
             Input.multiTouchEnabled = false;
+
+            OnMatched = null;
         }
-
-        private void Start()
-        {
-
+        
+        public void OnMatching(){
+            OnMatched?.Invoke();
         }
 
         #endregion

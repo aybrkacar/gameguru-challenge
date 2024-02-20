@@ -15,9 +15,11 @@ public class GridGeneratorEditor : Editor
         EditorApplication.update -= OnUpdate;
     }
 
+    // Gerekli miydi bilmiyorum fakat editorde Game penceresi free aspectte boyut değiştirince
+    // kamerayı düzenlemesi için yazıldı, pek sağlıklı çalışmıyor çözemedim :)
     private void OnUpdate()
     {
-
+        
         EditorApplication.delayCall += () =>
         {
             GridGenerator gridGenerator = (GridGenerator)target;
